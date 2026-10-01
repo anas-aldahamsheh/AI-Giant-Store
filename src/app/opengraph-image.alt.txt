@@ -1,0 +1,1 @@
+Giant Store — AI-powered e-commerce platform built with Next.js
