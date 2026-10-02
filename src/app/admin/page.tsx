@@ -15,6 +15,7 @@ import { useAuth } from "@/features/auth/store/auth.store";
 import { useOrders, type Order } from "@/features/checkout/store/orders.store";
 import { productService } from "@/features/products/services/productService";
 import type { Product } from "@/features/products/types/product.types";
+import { uniqueSlug } from "@/lib/utils/slug";
 
 export default function AdminPage() {
   const router = useRouter();
@@ -119,12 +120,7 @@ export default function AdminPage() {
   // Product CRUD Handlers
   const handleAddProduct = (e: React.FormEvent) => {
     e.preventDefault();
-    const rawSlug = newTitle
-      .toLowerCase()
-      .trim()
-      .replace(/[^\p{L}\p{N}]+/u, "-")
-      .replace(/(^-|-$)/g, "");
-    const slug = rawSlug || `prod-${Date.now()}`;
+    const slug = uniqueSlug(newTitle, productService.list().map((item) => item.slug));
     const product: Product = {
       id: `prod_${Date.now()}`,
       title: newTitle,
