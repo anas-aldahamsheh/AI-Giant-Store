@@ -84,29 +84,47 @@ export const geminiProvider: AiProvider = {
     const systemInstructionText = buildAdvisorSystemInstruction(products, ragContext);
     const contents = buildGeminiContents(messages);
 
-    const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-        signal: AbortSignal.timeout(20_000),
-        body: JSON.stringify({
-          systemInstruction: {
-            parts: [{ text: systemInstructionText }],
-          },
-          contents,
-          generationConfig: {
-            temperature: 0.2,
-            responseMimeType: "application/json",
-          },
-        }),
+    const body = JSON.stringify({
+      systemInstruction: {
+        parts: [{ text: systemInstructionText }],
       },
-    );
+      contents,
+      generationConfig: {
+        temperature: 0.2,
+        responseMimeType: "application/json",
+      },
+    });
 
-    if (!response.ok) {
-      console.error("Gemini API request failed with status", response.status);
-      return null;
+    // The model is busy now and then (503 or a slow reply); one quick retry
+    // usually gets through, all within a fixed time budget.
+    const deadline = Date.now() + 24_000;
+    let response: Response | null = null;
+    for (let attempt = 0; attempt < 3 && !response?.ok; attempt += 1) {
+      const remaining = deadline - Date.now();
+      if (remaining < 3_000) break;
+      if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, 400 * attempt));
+      try {
+        response = await fetch(
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
+            signal: AbortSignal.timeout(Math.min(attempt === 0 ? 12_000 : 10_000, remaining)),
+            body,
+          },
+        );
+      } catch (error) {
+        console.error("Gemini API request did not finish", error instanceof Error ? error.name : "unknown error");
+        response = null;
+        continue;
+      }
+      if (!response.ok) {
+        console.error("Gemini API request failed with status", response.status);
+        if (![429, 500, 502, 503, 504].includes(response.status)) return null;
+      }
     }
+
+    if (!response?.ok) return null;
 
     const data = (await response.json()) as { candidates?: GeminiCandidate[] };
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
