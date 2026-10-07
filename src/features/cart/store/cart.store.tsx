@@ -83,6 +83,9 @@ const useCartStore = create<CartState>()(
             items: [...state.items, toCartItem(product, Math.min(99, quantity))],
           };
         });
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("fx:cart-add"));
+        }
       },
       removeItem(id) {
         set((state) => ({ items: state.items.filter((item) => item.id !== id) }));

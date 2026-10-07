@@ -2,24 +2,24 @@
 
 import { m } from "framer-motion";
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
-import { scaleIn } from "@/lib/motion/motion-presets";
+import { flipUp, inViewOnce } from "@/lib/motion/motion-presets";
 
-export function ScaleIn({ children, className }: { children: ReactNode; className?: string }) {
-  const reduce = false;
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+export function ScaleIn({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
   return (
     <m.div
+      data-fx-manual
       className={className}
-      initial={mounted && reduce ? "visible" : "hidden"}
+      initial="hidden"
       whileInView="visible"
-      viewport={{ once: true }}
-      variants={scaleIn}
+      viewport={inViewOnce}
+      variants={flipUp}
+      style={{ transformPerspective: 1000 }}
     >
       {children}
     </m.div>

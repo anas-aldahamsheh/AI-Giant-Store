@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, m } from "framer-motion";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils/cn";
@@ -23,17 +24,24 @@ export function Modal({
   footer,
   className,
 }: ModalProps) {
-  if (!isOpen) {
-    return null;
-  }
-
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4"
+    <AnimatePresence>
+    {isOpen ? (
+    <m.div
+      key="modal"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4 backdrop-blur-[2px]"
       role="presentation"
       onMouseDown={onClose}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.25, delay: 0.05 } }}
     >
-      <section
+      <m.section
+        initial={{ opacity: 0, scale: 0.86, y: 40, rotateX: 18, filter: "blur(10px)" }}
+        animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0, filter: "blur(0px)" }}
+        exit={{ opacity: 0, scale: 0.92, y: 20, filter: "blur(6px)", transition: { duration: 0.22 } }}
+        transition={{ type: "spring", stiffness: 300, damping: 26 }}
+        style={{ transformPerspective: 1000 }}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
@@ -61,7 +69,9 @@ export function Modal({
         </header>
         <div className="p-5">{children}</div>
         {footer ? <footer className="border-t border-border p-5">{footer}</footer> : null}
-      </section>
-    </div>
+      </m.section>
+    </m.div>
+    ) : null}
+    </AnimatePresence>
   );
 }

@@ -51,7 +51,7 @@ export function CartPageContent() {
               <div
                 key={item.id}
                 style={{ animationDelay: `${idx * 75}ms` }}
-                className="motion-safe:animate-[fade-in_300ms_ease-out_both]"
+                className="motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]"
               >
                 <CartItem
                   item={item}

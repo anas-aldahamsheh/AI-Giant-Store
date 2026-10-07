@@ -5,7 +5,7 @@ export function Skeleton({ className, ...props }: HTMLAttributes<HTMLDivElement>
   return (
     <div
       aria-hidden="true"
-      className={cn("animate-pulse rounded-card bg-muted", className)}
+      className={cn("fx-shimmer rounded-card bg-muted", className)}
       {...props}
     />
   );

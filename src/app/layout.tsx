@@ -42,7 +42,16 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "if(!matchMedia('(prefers-reduced-motion: reduce)').matches)document.documentElement.classList.add('fx-boot')",
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col bg-background text-foreground overflow-x-hidden">
         <MotionSafe>
           <AuthProvider>

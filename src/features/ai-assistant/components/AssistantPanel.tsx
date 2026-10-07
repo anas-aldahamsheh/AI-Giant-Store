@@ -96,7 +96,7 @@ export function AssistantPanel({
   }
 
   return (
-    <Card role="dialog" aria-modal="true" aria-label="Giant AI Assistant" className="flex h-[calc(100dvh-7rem)] max-h-[36rem] w-[min(26rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-panel border border-white/70 bg-white/95 shadow-premium backdrop-blur motion-safe:animate-[scale-in_200ms_ease-out]">
+    <Card role="dialog" aria-modal="true" aria-label="Giant AI Assistant" className="flex h-[calc(100dvh-7rem)] max-h-[36rem] w-[min(26rem,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-panel border border-white/70 bg-white/95 shadow-premium backdrop-blur fx-genie">
       <div className="dark-mesh-bg flex items-center justify-between p-4 text-white">
         <div className="flex items-center gap-3">
           <span className="grid h-10 w-10 place-items-center rounded-2xl bg-white/15 text-sm font-black">AI</span>
@@ -125,7 +125,7 @@ export function AssistantPanel({
           const dir = isRtl ? "rtl" : "ltr";
 
           return (
-            <div key={message.id} className={`flex flex-col ${isAi ? "items-start" : "items-end"}`}>
+            <div key={message.id} className={`flex flex-col ${isAi ? "items-start fx-msg-ai" : "items-end fx-msg-user"}`}>
               <div
                 dir={dir}
                 style={{ unicodeBidi: "plaintext" }}

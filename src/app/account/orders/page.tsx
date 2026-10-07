@@ -182,7 +182,7 @@ export default function AccountOrdersPage() {
 
                     {/* Expanded details block */}
                     {isExpanded && (
-                      <div className="mt-6 border-t border-border pt-6 space-y-6 text-sm motion-safe:animate-[fade-in_250ms_ease-out_both]">
+                      <div className="mt-6 border-t border-border pt-6 space-y-6 text-sm motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
                         <div className="grid gap-6 md:grid-cols-2">
                           <div>
                             <h5 className="font-bold text-foreground mb-2">Shipping Address</h5>

@@ -3,7 +3,8 @@ import Link from "next/link";
 export function NewsletterCta() {
   return (
     <section className="premium-section">
-      <div className="premium-container premium-card grid gap-6 p-8 lg:grid-cols-[1fr_24rem] lg:items-end">
+      <div className="premium-container premium-card relative grid gap-6 p-8 lg:grid-cols-[1fr_24rem] lg:items-end">
+        <span aria-hidden="true" className="fx-ring" />
         <div>
           <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-600">
             Explore the demo
@@ -12,7 +13,7 @@ export function NewsletterCta() {
             Find what fits your needs.
           </h2>
         </div>
-        <Link href="/products" className="inline-flex h-11 items-center justify-center rounded-button bg-brand-600 px-5 text-sm font-semibold text-white hover:bg-brand-700">
+        <Link href="/products" data-fx-magnetic className="fx-shine relative overflow-hidden inline-flex h-11 items-center justify-center rounded-button bg-brand-600 px-5 text-sm font-semibold text-white hover:bg-brand-700">
           Browse products
         </Link>
       </div>

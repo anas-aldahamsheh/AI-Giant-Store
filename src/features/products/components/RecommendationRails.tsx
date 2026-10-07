@@ -30,16 +30,21 @@ function RecommendationRail({ rail }: { rail: Rail }) {
         <h2 className="text-2xl font-black text-slate-950">{rail.title}</h2>
         <p className="mt-1 text-sm text-slate-600">{rail.description}</p>
       </div>
-      <div className="flex snap-x gap-4 overflow-x-auto pb-3">
+      <div className="flex snap-x gap-4 overflow-x-auto pb-3" style={{ perspective: 1200 }}>
         {rail.products.map((product, index) => (
-          <m.article
+          <m.div
             key={product.id}
-            initial={{ opacity: 0, x: 24 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ delay: index * 0.04, duration: 0.25 }}
-            className="w-64 shrink-0 snap-start rounded-panel border border-white/70 bg-white p-3 shadow-soft"
+            initial={{ opacity: 0, x: 120, rotateY: -32, scale: 0.88, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, x: 0, rotateY: 0, scale: 1, filter: "blur(0px)" }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ type: "spring", stiffness: 90, damping: 17, delay: index * 0.09 }}
+            className="w-64 shrink-0 snap-start"
           >
+          <article
+            data-fx-tilt="10"
+            className="fx-tilt group relative h-full rounded-panel border border-white/70 bg-white p-3 shadow-soft transition hover:shadow-premium"
+          >
+            <span aria-hidden="true" className="fx-glare" />
             <Link href={`/products/${product.slug}`} className="block overflow-hidden rounded-[1rem] bg-slate-100">
               <ProductImage src={product.imageUrl} alt={product.title} />
             </Link>
@@ -56,7 +61,8 @@ function RecommendationRail({ rail }: { rail: Rail }) {
                 </Button>
               </div>
             </div>
-          </m.article>
+          </article>
+          </m.div>
         ))}
       </div>
     </section>
@@ -68,6 +74,8 @@ export function RecommendationRails() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  if (!mounted) return null;
 
   const rails: Rail[] = [
     {

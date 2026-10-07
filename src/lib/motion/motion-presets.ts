@@ -94,3 +94,47 @@ export const aiOrbPulse: Variants = {
     transition: { duration: 2, repeat: Infinity, ease: "easeOut" },
   },
 };
+
+export const easeOutExpo = [0.16, 1, 0.3, 1] as const;
+
+export const springSoft = {
+  type: "spring",
+  stiffness: 120,
+  damping: 20,
+  mass: 0.9,
+} as const;
+export const springSnappy = { type: "spring", stiffness: 420, damping: 26 } as const;
+
+export const riseIn: Variants = {
+  hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 1, ease: easeOutExpo },
+  },
+};
+
+export const flipUp: Variants = {
+  hidden: { opacity: 0, y: 60, rotateX: -35, scale: 0.92, filter: "blur(8px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: { ...springSoft },
+  },
+};
+
+export const popIn: Variants = {
+  hidden: { opacity: 0, scale: 0.6, y: 14 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { ...springSnappy } },
+};
+
+export const cascade = (stagger = 0.08, delay = 0): Variants => ({
+  hidden: {},
+  visible: { transition: { staggerChildren: stagger, delayChildren: delay } },
+});
+
+export const inViewOnce = { once: true, margin: "0px 0px -12% 0px" } as const;

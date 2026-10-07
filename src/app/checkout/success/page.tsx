@@ -1,8 +1,10 @@
 "use client";
 
+import { m } from "framer-motion";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
+import { ConfettiBurst } from "@/components/motion/ConfettiBurst";
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
 import { PriceDisplay } from "@/components/ui/PriceDisplay";
@@ -23,12 +25,33 @@ export default function OrderSuccessPage() {
   return (
     <main className="mesh-bg relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-16">
       <div className="noise-overlay absolute inset-0 opacity-20" />
+      <ConfettiBurst />
       {/* Animated Checkmark Circle */}
-      <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-green-200 bg-green-50 text-green-700 motion-safe:animate-[bounce_1s_ease-out_1]">
+      <m.div
+        data-fx-manual
+        className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-green-200 bg-green-50 text-green-700"
+        initial={{ scale: 0, rotate: -120 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ type: "spring", stiffness: 260, damping: 14, delay: 0.2 }}
+      >
+        <m.span
+          aria-hidden="true"
+          className="absolute inset-0 rounded-full border-2 border-green-400"
+          initial={{ scale: 1, opacity: 0.8 }}
+          animate={{ scale: 2.4, opacity: 0 }}
+          transition={{ duration: 1.2, delay: 0.55, ease: "easeOut" }}
+        />
         <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          <m.path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M5 13l4 4L19 7"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: 0.6, delay: 0.55, ease: "easeOut" }}
+          />
         </svg>
-      </div>
+      </m.div>
 
       <div className="relative mb-8 space-y-2 text-center">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">

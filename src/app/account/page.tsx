@@ -132,7 +132,7 @@ export default function AccountPage() {
       id: "overview",
       label: "Overview",
       content: (
-        <div className="space-y-6 motion-safe:animate-[fade-in_200ms_ease-out_both]">
+        <div className="space-y-6 motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
           <Card className="border-white/70 shadow-soft">
             <CardContent className="p-6 space-y-4">
               <h2 className="text-xl font-bold text-foreground">Account Overview</h2>
@@ -199,7 +199,7 @@ export default function AccountPage() {
       id: "profile",
       label: "Edit Profile",
       content: (
-        <Card className="motion-safe:animate-[fade-in_200ms_ease-out_both]">
+        <Card className="motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
           <CardContent className="p-6 space-y-6">
             <h2 className="text-xl font-bold text-foreground">Profile Settings</h2>
             {profileMessage && (
@@ -233,7 +233,7 @@ export default function AccountPage() {
       id: "addresses",
       label: "Shipping Addresses",
       content: (
-        <div className="space-y-6 motion-safe:animate-[fade-in_200ms_ease-out_both]">
+        <div className="space-y-6 motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold text-foreground">Manage Addresses</h2>
             {!showAddAddress && (
@@ -379,7 +379,7 @@ export default function AccountPage() {
       id: "notifications",
       label: "Notifications",
       content: (
-        <Card className="motion-safe:animate-[fade-in_200ms_ease-out_both]">
+        <Card className="motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
           <CardContent className="p-6 space-y-6">
             <h2 className="text-xl font-bold text-foreground">Notification Preferences</h2>
             {prefMessage && (

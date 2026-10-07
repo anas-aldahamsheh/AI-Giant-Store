@@ -14,7 +14,7 @@ export type CartItemProps = {
 
 export function CartItem({ item, onRemove, onQuantityChange }: CartItemProps) {
   return (
-    <article className="grid grid-cols-[5rem_1fr] gap-4 rounded-card border border-border bg-surface p-3 motion-safe:animate-[slide-up_220ms_ease-out_both]">
+    <article className="grid grid-cols-[5rem_1fr] gap-4 rounded-card border border-border bg-surface p-3 motion-safe:animate-[slide-up_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
       <ProductImage src={item.imageUrl} alt={item.title} />
       <div className="flex flex-col justify-between gap-2.5 min-w-0">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">

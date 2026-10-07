@@ -26,7 +26,7 @@ export function ProductImage({ src, alt, priority = false, className }: ProductI
           fill
           unoptimized={safeSrc.startsWith("https://")}
           sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 100vw"
-          className="object-cover transition duration-300 group-hover:scale-105"
+          className="object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-110"
           priority={priority}
         />
       ) : (

@@ -226,7 +226,7 @@ export default function AdminPage() {
   // Tab Content: Overview
   const renderOverview = () => {
     return (
-      <div className="space-y-6 motion-safe:animate-[fade-in_200ms_ease-out]">
+      <div className="space-y-6 motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardContent className="p-5 space-y-1">
@@ -335,7 +335,7 @@ export default function AdminPage() {
   // Tab Content: Products Manager
   const renderProducts = () => {
     return (
-      <div className="space-y-6 motion-safe:animate-[fade-in_200ms_ease-out]">
+      <div className="space-y-6 motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
         <div className="flex justify-between items-center">
           <h3 className="font-bold text-foreground text-lg">Product Catalog Management</h3>
           <div className="flex gap-2">
@@ -532,7 +532,7 @@ export default function AdminPage() {
   // Tab Content: Orders Manager
   const renderOrders = () => {
     return (
-      <div className="space-y-6 motion-safe:animate-[fade-in_200ms_ease-out]">
+      <div className="space-y-6 motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
         <h3 className="font-bold text-foreground text-lg">Manage Customer Orders</h3>
 
         <div className="space-y-4">
@@ -596,7 +596,7 @@ export default function AdminPage() {
     const sampleSources = productsList.slice(0, 4);
 
     return (
-      <div className="space-y-6 motion-safe:animate-[fade-in_200ms_ease-out]">
+      <div className="space-y-6 motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
         <div className="grid gap-4 md:grid-cols-3">
           <Card className="border-white/70 shadow-soft">
             <CardContent className="space-y-2 p-5">

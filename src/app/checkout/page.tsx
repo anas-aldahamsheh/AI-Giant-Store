@@ -251,7 +251,7 @@ export default function CheckoutPage() {
 
       {/* Abandoned recovery toast */}
       {checkoutRestored && step === 1 && (
-        <div className="mt-4 flex items-center justify-between rounded-button bg-brand-50 p-4 border border-brand-200 text-sm text-brand-900 motion-safe:animate-[slide-up_300ms_ease-out]">
+        <div className="mt-4 flex items-center justify-between rounded-button bg-brand-50 p-4 border border-brand-200 text-sm text-brand-900 motion-safe:animate-[slide-up_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
           <div>
             <span className="font-bold">Welcome back!</span> We restored your shipping details from your previous visit.
           </div>
@@ -300,7 +300,7 @@ export default function CheckoutPage() {
         <div>
           {/* STEP 1: Address Shipping Details */}
           {step === 1 && (
-            <Card className="motion-safe:animate-[fade-in_300ms_ease-out]">
+            <Card className="motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
               <CardContent className="p-6 space-y-6">
                 <h2 className="text-xl font-bold text-foreground">Shipping Address</h2>
 
@@ -421,7 +421,7 @@ export default function CheckoutPage() {
 
           {/* STEP 2: Shipping Method */}
           {step === 2 && (
-            <Card className="motion-safe:animate-[fade-in_300ms_ease-out]">
+            <Card className="motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
               <CardContent className="p-6 space-y-6">
                 <h2 className="text-xl font-bold text-foreground">Select Shipping Method</h2>
 
@@ -483,7 +483,7 @@ export default function CheckoutPage() {
 
           {/* STEP 3: Demo notice */}
           {step === 3 && (
-            <Card className="motion-safe:animate-[fade-in_300ms_ease-out]">
+            <Card className="motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
               <CardContent className="p-6 space-y-6">
                 <h2 className="text-xl font-bold text-foreground">Demo order</h2>
                 <p className="text-sm leading-6 text-muted-foreground">
@@ -499,7 +499,7 @@ export default function CheckoutPage() {
 
           {/* STEP 4: Review and Place Order */}
           {step === 4 && (
-            <Card className="motion-safe:animate-[fade-in_300ms_ease-out]">
+            <Card className="motion-safe:animate-[fade-in_800ms_cubic-bezier(0.16,1,0.3,1)_both]">
               <CardContent className="p-6 space-y-6">
                 <h2 className="text-xl font-bold text-foreground">Review Order Details</h2>
 

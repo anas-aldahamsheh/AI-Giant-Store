@@ -37,8 +37,15 @@ export function AssistantLauncher({ onOpen }: AssistantLauncherProps) {
         animate="animate"
       >
         <span className="absolute -inset-2 -z-10 rounded-full bg-cyan-400/20 blur-xl" />
+        <span aria-hidden="true" className="fx-ring" style={{ inset: "-4px", padding: "2px" }} />
+        <span aria-hidden="true" className="fx-orbit">
+          <span />
+        </span>
+        <span aria-hidden="true" className="fx-orbit fx-orbit-reverse">
+          <span />
+        </span>
         <span className="absolute -inset-4 -z-20 animate-ping rounded-full bg-brand-500/10" />
-        <span className="text-xl font-black">AI</span>
+        <span className="fx-ai-letters text-xl font-black">AI</span>
       </m.button>
     </div>
   );

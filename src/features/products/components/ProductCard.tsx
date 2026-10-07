@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { m } from "framer-motion";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { DiscountBadge } from "@/components/ui/DiscountBadge";
@@ -12,7 +11,6 @@ import { StockBadge } from "@/components/ui/StockBadge";
 import { useCart } from "@/features/cart/store/cart.store";
 import { useCompare } from "@/features/compare/store/compare.store";
 import { useWishlist } from "@/features/wishlist/store/wishlist.store";
-import { productCardHover } from "@/lib/motion/motion-presets";
 import type { Product } from "@/features/products/types/product.types";
 
 export type ProductCardProps = {
@@ -22,7 +20,6 @@ export type ProductCardProps = {
 
 export function ProductCard({ product, onQuickView }: ProductCardProps) {
   const [added, setAdded] = useState(false);
-  const reduce = false;
   const { addItem } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const { toggleCompare, isInCompare } = useCompare();
@@ -36,10 +33,11 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
   }
 
   return (
-    <m.article
-      whileHover={reduce ? undefined : productCardHover}
-      className="group relative overflow-hidden rounded-panel border border-white/70 bg-white/90 p-3 shadow-soft backdrop-blur transition"
+    <article
+      data-fx-tilt="8"
+      className="fx-tilt group relative overflow-hidden rounded-panel border border-white/70 bg-white/90 p-3 shadow-soft backdrop-blur transition hover:shadow-premium"
     >
+      <span aria-hidden="true" className="fx-glare" />
       <div className="pointer-events-none absolute inset-0 rounded-panel bg-gradient-to-br from-brand-600/0 via-cyan-400/0 to-violet-500/0 opacity-0 transition group-hover:from-brand-600/10 group-hover:via-cyan-400/10 group-hover:to-violet-500/10 group-hover:opacity-100" />
       <Link href={`/products/${product.slug}`} aria-label={`View ${product.title}`}>
         <ProductImage src={product.imageUrl} alt={product.title} className="rounded-[1.15rem]" />
@@ -72,7 +70,7 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
           <StockBadge status={product.stockStatus} />
         </div>
         <div className="grid grid-cols-3 gap-2 opacity-100 transition sm:translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100">
-          <Button type="button" className="col-span-3 shadow-glow" onClick={handleAddToCart}>
+          <Button type="button" className="fx-shine relative col-span-3 overflow-hidden shadow-glow" onClick={handleAddToCart}>
             {added ? "Added" : "Add to cart"}
           </Button>
           <Button
@@ -101,19 +99,19 @@ export function ProductCard({ product, onQuickView }: ProductCardProps) {
           </Button>
         </div>
       </div>
-    </m.article>
+    </article>
   );
 }
 
 export function ProductCardSkeleton() {
   return (
     <article className="rounded-panel border border-white/70 bg-white/80 p-3 shadow-soft">
-      <div className="aspect-square animate-pulse rounded-[1.15rem] bg-muted" />
+      <div className="fx-shimmer aspect-square rounded-[1.15rem] bg-muted" />
       <div className="mt-4 space-y-3">
-        <div className="h-4 w-24 animate-pulse rounded-full bg-muted" />
-        <div className="h-5 w-4/5 animate-pulse rounded-full bg-muted" />
-        <div className="h-5 w-32 animate-pulse rounded-full bg-muted" />
-        <div className="h-11 animate-pulse rounded-button bg-muted" />
+        <div className="fx-shimmer h-4 w-24 rounded-full bg-muted" />
+        <div className="fx-shimmer h-5 w-4/5 rounded-full bg-muted" />
+        <div className="fx-shimmer h-5 w-32 rounded-full bg-muted" />
+        <div className="fx-shimmer h-11 rounded-button bg-muted" />
       </div>
     </article>
   );
