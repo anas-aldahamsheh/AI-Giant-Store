@@ -1,3 +1,4 @@
+import { demoProducts } from "@/features/products/data/demo-products.data";
 import type {
   Product,
   ProductFilters,
@@ -9,6 +10,11 @@ const storageKeyProducts = "giant-store-custom-products";
 function getProducts(): Product[] {
   if (typeof window !== "undefined") {
     const stored = window.localStorage.getItem(storageKeyProducts);
+    if (stored === null) {
+      // First visit: start with the sample catalog so there is something to try.
+      window.localStorage.setItem(storageKeyProducts, JSON.stringify(demoProducts));
+      return [...demoProducts];
+    }
     if (stored) {
       try {
         const parsed = JSON.parse(stored) as Product[];

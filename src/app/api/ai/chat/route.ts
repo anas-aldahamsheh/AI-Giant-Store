@@ -18,7 +18,19 @@ function json(body: unknown, status = 200) {
 
 function sameOrigin(request: Request) {
   const origin = request.headers.get("origin");
-  return !origin || origin === new URL(request.url).origin;
+  if (!origin) return true;
+  let originHost: string;
+  try {
+    originHost = new URL(origin).host.toLowerCase();
+  } catch {
+    return false;
+  }
+  // Behind a reverse proxy request.url carries the internal address, so compare
+  // against the host the browser actually asked for.
+  const hosts = [request.headers.get("x-forwarded-host"), request.headers.get("host"), new URL(request.url).host]
+    .filter((value): value is string => Boolean(value))
+    .map((value) => value.split(",")[0].trim().toLowerCase());
+  return hosts.includes(originHost);
 }
 
 async function readLimitedBody(request: Request): Promise<string | null> {

@@ -4,7 +4,6 @@ import { FeaturedCategories } from "@/features/home/components/FeaturedCategorie
 import { HeroSection } from "@/features/home/components/HeroSection";
 import { SmartBundles } from "@/features/home/components/SmartBundles";
 import { TrustBadges } from "@/features/home/components/TrustBadges";
-import { TrustStats } from "@/features/home/components/TrustStats";
 import { WhyShopWithUs } from "@/features/home/components/WhyShopWithUs";
 import { NewsletterCta } from "@/features/home/components/NewsletterCta";
 import { RecommendationRails } from "@/features/products/components/RecommendationRails";
@@ -13,7 +12,6 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-background">
       <HeroSection />
-      <TrustStats />
       <FeaturedCategories />
       <CampaignBanners />
       <RecommendationRails />

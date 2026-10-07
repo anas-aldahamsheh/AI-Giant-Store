@@ -34,6 +34,14 @@ describe("chat endpoint boundaries", () => {
     expect(response.status).toBe(403);
   });
 
+  it("accepts same-site requests that reach the app through a reverse proxy", async () => {
+    const response = await POST(request(
+      { messages: [{ role: "user", content: "Hi" }], products: [item] },
+      { origin: "https://store.example", host: "store.example", "x-forwarded-proto": "https" },
+    ));
+    expect(response.status).toBe(200);
+  });
+
   it("rejects malformed product input and non-user final turns", () => {
     expect(aiChatRequestSchema.safeParse({ messages: [{ role: "assistant", content: "Hi" }] }).success).toBe(false);
     expect(aiChatRequestSchema.safeParse({ messages: [{ role: "user", content: "Hi" }], products: [{ id: "fake" }] }).success).toBe(false);

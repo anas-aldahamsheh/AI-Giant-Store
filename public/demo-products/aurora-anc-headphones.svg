@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f46e5"/><stop offset="1" stop-color="#22d3ee"/></linearGradient>
+<radialGradient id="hi" cx=".28" cy=".2" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".5"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="dev" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e2e8f5"/></linearGradient>
+<linearGradient id="dark" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#334155"/><stop offset="1" stop-color="#0f172a"/></linearGradient>
+<filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="28" stdDeviation="26" flood-color="#0f172a" flood-opacity=".28"/></filter>
+</defs>
+<rect width="800" height="800" fill="url(#bg)"/>
+<rect width="800" height="800" fill="url(#hi)"/>
+<circle cx="400" cy="400" r="270" fill="#fff" fill-opacity=".12"/>
+<ellipse cx="400" cy="640" rx="210" ry="26" fill="#0f172a" fill-opacity=".18"/>
+<g filter="url(#sh)"><path d="M230 430 V380 a170 170 0 0 1 340 0 V430" fill="none" stroke="#ffffff" stroke-width="34" stroke-linecap="round"/><rect x="190" y="400" width="110" height="180" rx="50" fill="url(#dark)"/><rect x="500" y="400" width="110" height="180" rx="50" fill="url(#dark)"/><rect x="214" y="430" width="62" height="120" rx="30" fill="#475569"/><rect x="524" y="430" width="62" height="120" rx="30" fill="#475569"/></g>
+</svg>
