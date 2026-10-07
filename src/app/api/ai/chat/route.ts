@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { products } from "@/features/products/data/products.data";
 import type { Product } from "@/features/products/types/product.types";
-import { buildFallbackAdvisorResponse } from "@/lib/ai/fallback-advisor";
+import { buildFallbackAdvisorResponse, isPromptInjection } from "@/lib/ai/fallback-advisor";
 import { productAdvisorPromptVersion } from "@/lib/ai/prompts/product-advisor";
 import { geminiProvider } from "@/lib/ai/providers/gemini";
 import { retrieveRelevantProducts } from "@/lib/ai/rag/retrieval";
@@ -133,7 +133,9 @@ export async function POST(request: Request) {
   const catalog: Product[] = browserCatalog ? parsed.data.products! : products;
   const messages = parsed.data.messages;
   const fallback = buildFallbackAdvisorResponse(messages, catalog);
-  if (catalog.length === 0) return json(sanitizeResponse(fallback, catalog, browserCatalog));
+  if (catalog.length === 0 || isPromptInjection(messages[messages.length - 1].content)) {
+    return json(sanitizeResponse(fallback, catalog, browserCatalog));
+  }
 
   let candidate: AiChatResponse = fallback;
   try {
@@ -145,7 +147,6 @@ export async function POST(request: Request) {
     const providerResponse = await geminiProvider.generate({
       messages,
       products: orderedCatalog,
-      ragContext: rag.context,
     });
     if (providerResponse) {
       candidate = {

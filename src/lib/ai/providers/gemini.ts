@@ -81,7 +81,8 @@ export const geminiProvider: AiProvider = {
       return null;
     }
 
-    const systemInstructionText = buildAdvisorSystemInstruction(products, ragContext);
+    const latestUserMessage = [...messages].reverse().find((message) => message.role === "user")?.content;
+    const systemInstructionText = buildAdvisorSystemInstruction(products, ragContext, latestUserMessage);
     const contents = buildGeminiContents(messages);
 
     const body = JSON.stringify({
@@ -95,21 +96,21 @@ export const geminiProvider: AiProvider = {
       },
     });
 
-    // The model is busy now and then (503 or a slow reply); one quick retry
-    // usually gets through, all within a fixed time budget.
-    const deadline = Date.now() + 24_000;
+    // The model is busy now and then (503 or a slow reply), so it gets one
+    // retry, both tries within a fixed time budget.
+    const deadline = Date.now() + 32_000;
     let response: Response | null = null;
-    for (let attempt = 0; attempt < 3 && !response?.ok; attempt += 1) {
+    for (let attempt = 0; attempt < 2 && !response?.ok; attempt += 1) {
       const remaining = deadline - Date.now();
       if (remaining < 3_000) break;
-      if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, 400 * attempt));
+      if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, 400));
       try {
         response = await fetch(
           "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent",
           {
             method: "POST",
             headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-            signal: AbortSignal.timeout(Math.min(attempt === 0 ? 12_000 : 10_000, remaining)),
+            signal: AbortSignal.timeout(Math.min(16_000, remaining)),
             body,
           },
         );

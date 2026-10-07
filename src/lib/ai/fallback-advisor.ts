@@ -190,6 +190,13 @@ function productsInContext(messages: AiChatMessage[], products: Product[]) {
 
 const has = (text: string, pattern: RegExp) => pattern.test(text);
 
+const injectionPattern = /(ignore (all|previous|the|your) |system prompt|your instructions|developer mode|تجاهل التعليمات|التعليمات السابقه|تعليماتك)/;
+
+/** Attempts to read or override the advisor's rules; these never reach the model. */
+export function isPromptInjection(message: string) {
+  return injectionPattern.test(normalize(message));
+}
+
 export function buildFallbackAdvisorResponse(messages: AiChatMessage[], products: Product[]): AiChatResponse {
   const raw = messages[messages.length - 1]?.content ?? "";
   const text = normalize(raw);
@@ -233,7 +240,7 @@ export function buildFallbackAdvisorResponse(messages: AiChatMessage[], products
   }
 
   // Off-topic or attempts to change the rules.
-  if (has(text, /(ignore (all|previous|the) |system prompt|your instructions|تجاهل التعليمات|التعليمات السابقه)/)) {
+  if (has(text, injectionPattern)) {
     return respond(
       ar ? "أقدر أساعدك فقط في منتجات هذا المتجر. شو المنتج اللي بتدور عليه؟" : "I can only help with products in this store. What are you shopping for?",
       [],

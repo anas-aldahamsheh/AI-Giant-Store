@@ -80,9 +80,11 @@ export function buildCatalogContext(products: Product[]) {
     .join("\n\n");
 }
 
-export function buildAdvisorSystemInstruction(products: Product[], ragContext?: string) {
+export function buildAdvisorSystemInstruction(products: Product[], ragContext?: string, latestMessage?: string) {
+  const language = latestMessage === undefined ? "" : /[\u0600-\u06FF]/.test(latestMessage) ? "Arabic" : "English";
   return [
     productAdvisorSystemPrompt,
+    language ? `The user's latest message is in ${language}. Write "answer" and "follow_up_questions" in ${language}, whatever language earlier turns used.` : "",
     ragContext ? `RAG Knowledge Chunks:\n${ragContext}\n` : "",
     `Full store catalog (${products.length} products):`,
     buildCatalogContext(products),
