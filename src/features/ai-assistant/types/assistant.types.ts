@@ -12,4 +12,5 @@ export type AssistantMessage = {
   role: "user" | "assistant";
   content: string;
   recommendedProducts?: AssistantRecommendedProduct[];
+  followUps?: string[];
 };

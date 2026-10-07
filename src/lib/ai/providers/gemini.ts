@@ -89,7 +89,7 @@ export const geminiProvider: AiProvider = {
       {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
-        signal: AbortSignal.timeout(12_000),
+        signal: AbortSignal.timeout(20_000),
         body: JSON.stringify({
           systemInstruction: {
             parts: [{ text: systemInstructionText }],
@@ -152,11 +152,11 @@ export const geminiProvider: AiProvider = {
         .slice(0, 5);
 
       return {
-        answer: typeof raw.answer === "string" ? raw.answer.slice(0, 5000) : "",
+        answer: typeof raw.answer === "string" ? raw.answer.replaceAll("**", "").slice(0, 5000) : "",
         recommended_products,
         follow_up_questions: Array.isArray(raw.follow_up_questions)
           ? raw.follow_up_questions.filter((value: unknown): value is string => typeof value === "string").slice(0, 5)
-          : ["Show more options", "Compare these products"],
+          : [],
         sources: Array.isArray(raw.sources)
           ? raw.sources.filter((value: unknown): value is string => typeof value === "string").slice(0, 5)
           : recommended_products.map((p) => p.id),

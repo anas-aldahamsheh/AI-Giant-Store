@@ -138,10 +138,13 @@ export async function POST(request: Request) {
   let candidate: AiChatResponse = fallback;
   try {
     const rag = retrieveRelevantProducts(catalog, messages[messages.length - 1].content);
-    const relevantProducts = rag.products.length ? rag.products : catalog.slice(0, 15);
+    // The model sees the whole catalog (at most 40 items) so it can answer store-wide
+    // questions such as the cheapest item or a comparison; the best matches go first.
+    const relevantIds = new Set(rag.products.map((product) => product.id));
+    const orderedCatalog = [...rag.products, ...catalog.filter((product) => !relevantIds.has(product.id))];
     const providerResponse = await geminiProvider.generate({
       messages,
-      products: relevantProducts,
+      products: orderedCatalog,
       ragContext: rag.context,
     });
     if (providerResponse) {

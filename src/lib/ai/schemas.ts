@@ -16,6 +16,7 @@ const productInputSchema = z.object({
   shortDescription: z.string().max(500).default(""),
   imageUrl: z.string().max(500).default(""),
   price: z.number().finite().nonnegative().max(10_000_000),
+  compareAtPrice: z.number().finite().nonnegative().max(10_000_000).optional(),
   ratingAverage: z.number().finite().min(0).max(5).default(0),
   ratingCount: z.number().int().nonnegative().max(1_000_000).default(0),
   stockStatus: z.enum(["in_stock", "low_stock", "out_of_stock"]),

@@ -198,6 +198,26 @@ export function AssistantPanel({
           );
         })}
 
+        {(() => {
+          const last = messages[messages.length - 1];
+          if (messages.length < 2 || isTyping || last.role !== "assistant" || !last.followUps?.length) return null;
+          return (
+            <div className="flex flex-wrap gap-2 fx-msg-ai">
+              {last.followUps.map((question) => (
+                <button
+                  key={question}
+                  type="button"
+                  dir="auto"
+                  onClick={() => onSendMessage(question)}
+                  className="rounded-full border border-brand-200 bg-white px-3 py-1 text-xs font-semibold text-brand-700 transition hover:bg-brand-50"
+                >
+                  {question}
+                </button>
+              ))}
+            </div>
+          );
+        })()}
+
         {isTyping ? (
           <div role="status" aria-label="Assistant is responding" className="flex w-16 items-center gap-1.5 rounded-2xl rounded-tl-none border border-slate-200 bg-white p-3 text-slate-500">
             <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400" />

@@ -71,3 +71,6 @@ desktop.ini
 !README.md
 docs/
 run_instructions.txt
+
+# Assistant check output
+scripts/assistant-check/last-run.json
