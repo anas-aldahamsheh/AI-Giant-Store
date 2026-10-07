@@ -41,7 +41,7 @@ type AuthContextValue = {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (email: string, password: string) => Promise<User["role"] | null>;
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
   forgotPassword: (email: string) => Promise<boolean>;
@@ -55,11 +55,43 @@ type AuthContextValue = {
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
-const storageKeyUser = "giant-store-user";
+const storageKeyUser = "giant-store-account";
+// Sign-ins saved before the administrator moved to the server, the old demo
+// administrator's included. They are dropped, so everyone signs in again.
+const retiredStorageKeys = ["giant-store-user"];
 
-const MOCK_ADMIN_EMAIL = "admin@giantstore.com";
-const MOCK_USER_EMAIL = "user@giantstore.com";
-const MOCK_PASSWORD = "password123";
+const unavailableMessage = "Sign-in is unavailable right now. Please try again.";
+
+type AdminCheck = { reserved: boolean; admin: boolean } | { error: string };
+
+/**
+ * Asks the server whether an address belongs to the store administrator and, when a
+ * password is given, whether it is the administrator's. The password is never in this code.
+ */
+async function checkAdmin(email: string, password?: string): Promise<AdminCheck> {
+  const response = await fetch("/api/auth/admin", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+  const body = (await response.json().catch(() => ({}))) as Partial<{
+    reserved: boolean;
+    admin: boolean;
+    error: string;
+  }>;
+  if (!response.ok) return { error: body.error ?? unavailableMessage };
+  return { reserved: Boolean(body.reserved), admin: Boolean(body.admin) };
+}
+
+async function isAdminAddress(email: string) {
+  try {
+    const check = await checkAdmin(email.trim().toLowerCase());
+    return "reserved" in check && check.reserved;
+  } catch {
+    // Visitor accounts live in this browser, so they keep working when the check cannot run.
+    return false;
+  }
+}
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -67,6 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    for (const key of retiredStorageKeys) window.localStorage.removeItem(key);
     const stored = window.localStorage.getItem(storageKeyUser);
     if (stored) {
       try {
@@ -90,21 +123,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async login(email, password) {
         setIsLoading(true);
         setError(null);
-        await new Promise((r) => setTimeout(r, 600)); // mock network delay
 
-        // Simple mock credentials validation
         const normalizedEmail = email.trim().toLowerCase();
-        const isDemoAdmin = normalizedEmail === MOCK_ADMIN_EMAIL;
-        if (
-          (isDemoAdmin && password === MOCK_PASSWORD) ||
-          (!isDemoAdmin && ((normalizedEmail === MOCK_USER_EMAIL && password === MOCK_PASSWORD) ||
-            (normalizedEmail.includes("@") && password.length >= 6)))
-        ) {
+        let check: AdminCheck;
+        try {
+          check = await checkAdmin(normalizedEmail, password);
+        } catch {
+          check = { error: unavailableMessage };
+        }
+        if ("error" in check) {
+          setError(check.error);
+          setIsLoading(false);
+          return null;
+        }
+
+        // The administrator is checked by the server; any other address is a visitor
+        // account in this browser, entered with a demo code of at least six characters.
+        const isAdmin = check.admin;
+        if (isAdmin || (normalizedEmail.includes("@") && password.length >= 6)) {
           const loggedInUser: User = {
-            id: isDemoAdmin ? "admin_001" : `user_${normalizedEmail}`,
-            name: isDemoAdmin ? "Demo Admin" : normalizedEmail.split("@")[0],
+            id: isAdmin ? "admin_001" : `user_${normalizedEmail}`,
+            name: isAdmin ? "Store Admin" : normalizedEmail.split("@")[0],
             email: normalizedEmail,
-            role: isDemoAdmin ? "admin" : "user",
+            role: isAdmin ? "admin" : "user",
             addresses: [
               {
                 id: "addr_default",
@@ -128,20 +169,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setUser(loggedInUser);
           window.localStorage.setItem(storageKeyUser, JSON.stringify(loggedInUser));
           setIsLoading(false);
-          return true;
+          return loggedInUser.role;
         }
 
         setError("Invalid email or password. Password must be at least 6 characters.");
         setIsLoading(false);
-        return false;
+        return null;
       },
       async register(name, email, password) {
         setIsLoading(true);
         setError(null);
-        await new Promise((r) => setTimeout(r, 800));
 
-        if (email.trim().toLowerCase() === MOCK_ADMIN_EMAIL) {
-          setError("This address is reserved for the demo administrator.");
+        if (await isAdminAddress(email)) {
+          setError("This address is reserved for the store administrator.");
           setIsLoading(false);
           return false;
         }
@@ -194,7 +234,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
       async updateProfile(name, email) {
         if (!user) return false;
-        if (email.trim().toLowerCase() === MOCK_ADMIN_EMAIL && user.role !== "admin") return false;
+        const changesEmail = email.trim().toLowerCase() !== user.email.trim().toLowerCase();
+        if (changesEmail && user.role !== "admin" && (await isAdminAddress(email))) return false;
         const updated = { ...user, name, email };
         setUser(updated);
         window.localStorage.setItem(storageKeyUser, JSON.stringify(updated));

@@ -24,7 +24,7 @@ A modern, fully interactive online store built with **Next.js App Router**, **Ty
 
 Giant Store is a full-featured e-commerce front end that runs **100% locally** — no external database or backend setup required. Accounts, products, cart, orders, wishlist and comparisons are persisted in the browser, so you can clone the project and have a complete shopping experience running in under a minute.
 
-The store starts with an **empty catalog**: sign in with the demo admin account and add products from the **Admin dashboard** — they instantly appear across the storefront, search and the AI assistant.
+The store starts with an **empty catalog**: sign in as the store administrator and add products from the **Admin dashboard** — they instantly appear across the storefront, search and the AI assistant.
 
 The optional AI assistant helps shoppers find products through natural conversation. It retrieves relevant products from the catalog (RAG) and uses **Google Gemini** to generate recommendations. If no API key is configured, it automatically falls back to a built-in local product advisor, so the feature always works.
 
@@ -126,23 +126,20 @@ All variables are documented in [`.env.example`](.env.example).
 | `APP_ENV` | No | Environment label (default `local`) |
 | `GEMINI_API_KEY` | No | Google Gemini API key for the AI assistant — get one at [Google AI Studio](https://aistudio.google.com/apikey). Without it the local fallback advisor is used |
 | `TRUST_PROXY_IP_HEADERS` | No | Set to `true` only behind a trusted reverse proxy (used by the AI rate limiter) |
+| `ADMIN_EMAIL` | No | Email of the store administrator. Together with `ADMIN_PASSWORD` it turns on the administrator sign-in |
+| `ADMIN_PASSWORD` | No | The administrator's password. It is checked on the server only and never reaches the browser |
 
 > ⚠️ Never commit your real `.env` file. It is already excluded by `.gitignore`.
 
-### Demo Accounts
+### Accounts
 
-Authentication is simulated locally for demo purposes:
+Visitor accounts are simulated in the browser: register any account, or sign in with any email and a demo code of at least six characters. They are stored in that browser only.
 
-| Role | Email | Password |
-|---|---|---|
-| Admin | `admin@giantstore.com` | `password123` |
-| User | `user@giantstore.com` | `password123` |
-
-Or register any new account from the browser.
+The store administrator signs in with `ADMIN_EMAIL` and `ADMIN_PASSWORD` from the server's environment. The password is checked on the server, so it is never part of the code sent to the browser. Without both values there is no administrator sign-in.
 
 ### Adding products
 
-1. Sign in with the **Admin** account — you are redirected to `/admin`.
+1. Sign in with the administrator's email and password — you are redirected to `/admin`.
 2. Open **Products Catalog** → **Create Product** and fill in the details (image URLs from Unsplash work out of the box).
 3. Products are saved in your browser and appear immediately in the store, search and AI assistant.
 

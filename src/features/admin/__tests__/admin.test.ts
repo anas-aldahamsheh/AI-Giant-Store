@@ -12,13 +12,6 @@ describe("Admin Dashboard Logic Mock Tests", () => {
     expect(completed.length).toBe(2);
   });
 
-  it("should identify administrator emails correctly", () => {
-    const emails = ["admin@giantstore.com", "user@giantstore.com"];
-    const isAdmin = (email: string) => email === "admin@giantstore.com";
-    expect(isAdmin(emails[0])).toBe(true);
-    expect(isAdmin(emails[1])).toBe(false);
-  });
-
   it("should confirm write protection status message is defined", () => {
     const writeSafetyMessage = "Write Safety Enabled";
     expect(writeSafetyMessage).toContain("Safety");

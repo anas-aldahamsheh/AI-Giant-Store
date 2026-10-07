@@ -30,13 +30,9 @@ export default function LoginPage() {
       return;
     }
 
-    const success = await login(email, password);
-    if (success) {
-      if (email.toLowerCase().trim() === "admin@giantstore.com") {
-        router.push("/admin");
-      } else {
-        router.push("/account");
-      }
+    const role = await login(email, password);
+    if (role) {
+      router.push(role === "admin" ? "/admin" : "/account");
     }
   };
 
